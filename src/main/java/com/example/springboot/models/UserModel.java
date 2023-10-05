@@ -2,10 +2,6 @@ package com.example.springboot.models;
 
 import com.example.springboot.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TB_USERS")
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "idUser")
+//@EqualsAndHashCode(of = "idUser")
 public class UserModel implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,15 +31,15 @@ public class UserModel implements UserDetails, Serializable {
         this.password = encryptedPassword;
         this.role = role;
     }
+
+    public UserModel() {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UserRole.ADMIN){
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     @Override
@@ -74,8 +67,29 @@ public class UserModel implements UserDetails, Serializable {
         return active;
     }
 
+    public UUID getIdUser() {
+        return idUser;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 }
 
